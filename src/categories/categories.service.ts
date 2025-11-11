@@ -15,9 +15,11 @@ export class CategoriesService {
   }
 
   async find(query: GetCategoriesQuery) {
-    const { page, pageSize, keyword } = query;
-    const skip = Number((page - 1) * pageSize);
-    const take = Number(pageSize);
+    let { page, pageSize, keyword } = query;
+    page = Number(page);
+    pageSize = Number(pageSize);
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
     
     const categories = await this.prisma.categories.findMany({
       skip,
@@ -41,22 +43,7 @@ export class CategoriesService {
       ...category,
       id: category.id.toString(),
     }));
-    const totalItems = await this.prisma.categories.count({
-      where: {
-        OR: [
-          {
-            name_en: {
-              contains: keyword,
-            },
-          },
-          {
-            name_vi: {
-              contains: keyword,
-            },
-          },
-        ],
-      },
-    });
+    const totalItems = await this.prisma.categories.count();
     const totalPage = Math.ceil(totalItems / take) || 0;
     return {
       "data": categoriesArray,
@@ -70,12 +57,18 @@ export class CategoriesService {
   }
 
   async patchOrder(data: PatchOrderDto[]) {
+    let categories = [];
     for (let i = 0; i < data.length; i++) {
-      await this.prisma.categories.update({
+      let category = await this.prisma.categories.update({
         where: { id: data[i].id },
         data: { order: data[i].order },
       });
+      categories.push({
+        ...category,
+        id: category.id.toString(),
+      });
     }
+    return categories;
   }
 
   async patchOrderByCategoryId(id: bigint, order: number) {

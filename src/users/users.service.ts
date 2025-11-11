@@ -8,9 +8,11 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async find(query: GetUsersQuery) {
-    const { page, pageSize, keyword } = query;
-    const skip = Number((page - 1) * pageSize);
-    const take = Number(pageSize);
+    let { page, pageSize, keyword } = query;
+    page = Number(page);
+    pageSize = Number(pageSize);
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
     const users = await this.prisma.users.findMany({
       skip,
       take,
@@ -20,13 +22,7 @@ export class UsersService {
         },
       },
     });
-    const totalItems = await this.prisma.users.count({
-      where: {
-        email: {
-          contains: keyword,
-        },
-      },
-    });
+    const totalItems = await this.prisma.users.count();
     const totalPage = Math.ceil(totalItems / take) || 0;
     return {
       data: users,
@@ -69,9 +65,10 @@ export class UsersService {
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
-    return this.prisma.users.update({
+    const user = this.prisma.users.update({
       where: { id },
       data,
     });
+    return user;
   }
 }
