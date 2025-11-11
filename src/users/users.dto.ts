@@ -1,4 +1,4 @@
-export class GetUsersParam {
+export class GetUsersQuery {
   page: number;
   pageSize: number;
   keyword: string;

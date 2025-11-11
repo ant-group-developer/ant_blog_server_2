@@ -5,11 +5,6 @@ import { PostsModule } from './posts/posts.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [
-    PrismaModule,
-    UsersModule,
-    CategoriesModule,
-    PostsModule
-  ],
+  imports: [PrismaModule, UsersModule, CategoriesModule, PostsModule],
 })
-export class AppModule { }
+export class AppModule {}
