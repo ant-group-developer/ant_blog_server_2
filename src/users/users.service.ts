@@ -58,6 +58,14 @@ export class UsersService {
   }
 
   async update(id: string, data: UpdateUserDto) {
+    const existUser = await this.prisma.users.findUnique({
+      where: { id }
+    })
+    if(!existUser) {
+      return {
+        "message": "This user is not exist"
+      }
+    }
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }

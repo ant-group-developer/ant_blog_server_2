@@ -10,3 +10,9 @@ export class PatchOrderDto {
   id: bigint;
   order: number;
 }
+
+export class GetCategoriesQuery {
+  page: number;
+  pageSize: number;
+  keyword: string;
+}

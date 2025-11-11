@@ -6,9 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { CreateCategoryDto, PatchOrderDto } from './categories.dto';
+import {
+  CreateCategoryDto,
+  GetCategoriesQuery,
+  PatchOrderDto,
+} from './categories.dto';
 @Controller('cms/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -18,8 +23,8 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  find(@Query() query: GetCategoriesQuery) {
+    return this.categoriesService.find(query);
   }
 
   @Patch('order')
