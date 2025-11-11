@@ -17,3 +17,8 @@ export class UpdateUserDto {
   modifier_id?: string;
   status?: boolean;
 }
+
+export class User {
+  email: string;
+  password: string;
+}

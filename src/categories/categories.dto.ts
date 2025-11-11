@@ -16,3 +16,12 @@ export class GetCategoriesQuery {
   pageSize: number;
   keyword: string;
 }
+
+export class UpdateCategoryDto {
+  name_vi?: string;
+  name_en?: string;
+  slug?: string;
+  order?: number;
+  creator_id?: string;
+  modifier_id?: string;
+}

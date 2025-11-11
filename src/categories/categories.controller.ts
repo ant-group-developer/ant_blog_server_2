@@ -8,12 +8,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
 import {
   CreateCategoryDto,
   GetCategoriesQuery,
   PatchOrderDto,
+  UpdateCategoryDto,
 } from './categories.dto';
+import { CategoriesService } from './categories.service';
 @Controller('cms/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
@@ -32,16 +33,16 @@ export class CategoriesController {
     return this.categoriesService.patchOrder(data);
   }
 
-  @Patch(':category-id')
+  @Patch(':categoryId')
   patchOrderByCategoryId(
-    @Param('category-id') id: string,
-    @Body() order: number,
+    @Param('categoryId') id: string,
+    @Body() data: UpdateCategoryDto,
   ) {
-    return this.categoriesService.patchOrderByCategoryId(BigInt(id), order);
+    return this.categoriesService.patchOrderByCategoryId(Number(id), data);
   }
 
-  @Delete(':category-id')
-  deleteCategory(@Param('category-id') id: string) {
-    return this.categoriesService.deleteCategory(BigInt(id));
+  @Delete(':categoryId')
+  deleteCategory(@Param('categoryId') id: string) {
+    return this.categoriesService.deleteCategory(Number(id));
   }
 }

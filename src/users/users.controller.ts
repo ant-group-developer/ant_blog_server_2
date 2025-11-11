@@ -1,15 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
   Param,
-  Body,
   Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 
+import { CreateUserDto, GetUsersQuery, UpdateUserDto, User } from './users.dto';
 import { UsersService } from './users.service';
-import { CreateUserDto, GetUsersQuery, UpdateUserDto } from './users.dto';
 @Controller('cms/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -27,5 +27,10 @@ export class UsersController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() data: UpdateUserDto) {
     return this.usersService.update(id, data);
+  }
+
+  @Post('/login')
+  login(@Body() data: User) {
+    return this.usersService.login(data);
   }
 }
