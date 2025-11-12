@@ -9,17 +9,16 @@ import {
   Query,
 } from '@nestjs/common';
 import {
-  CreateCategoryDto,
+  CategoryDto,
   GetCategoriesQuery,
   PatchOrderDto,
-  UpdateCategoryDto,
 } from './categories.dto';
 import { CategoriesService } from './categories.service';
 @Controller('cms/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
   @Post()
-  create(@Body() data: CreateCategoryDto) {
+  create(@Body() data: CategoryDto) {
     return this.categoriesService.create(data);
   }
 
@@ -36,7 +35,7 @@ export class CategoriesController {
   @Patch(':categoryId')
   patchOrderByCategoryId(
     @Param('categoryId') id: string,
-    @Body() data: UpdateCategoryDto,
+    @Body() data: CategoryDto,
   ) {
     return this.categoriesService.patchOrderByCategoryId(Number(id), data);
   }

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePostDto, GetPostsQuery, UpdatePostByIdDto } from './posts.dto';
+import { PostDto, GetPostsQuery } from './posts.dto';
 
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreatePostDto) {
+  async create(data: PostDto) {
     try {
       const existCategory = await this.prisma.categories.findUnique({
         where: { id: BigInt(data.category_id) },
@@ -101,7 +101,7 @@ export class PostsService {
     }
   }
 
-  async patchPostById(id: number, data: UpdatePostByIdDto) {
+  async patchPostById(id: number, data: PostDto) {
     try {
       const existPost = await this.prisma.posts.findUnique({
         where: { id: id },
@@ -110,6 +110,16 @@ export class PostsService {
         return {
           message: 'This post is not exist !',
         };
+      }
+      if(data.category_id && data.category_id !== existPost.category_id.toString()){
+        const existCategory = await this.prisma.categories.findUnique({
+          where: {id: BigInt(data.category_id)}
+        });
+        if(!existCategory) {
+          return {
+          message: 'The category is not exist in the system !',
+        };
+        }
       }
       const post = await this.prisma.posts.update({
         where: { id: id },

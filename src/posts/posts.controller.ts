@@ -8,14 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CreatePostDto, GetPostsQuery, UpdatePostByIdDto } from './posts.dto';
+import { PostDto, GetPostsQuery } from './posts.dto';
 import { PostsService } from './posts.service';
 
 @Controller('cms/posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Post()
-  create(@Body() data: CreatePostDto) {
+  create(@Body() data: PostDto) {
     return this.postsService.create(data);
   }
 
@@ -25,7 +25,7 @@ export class PostsController {
   }
 
   @Patch(':postId')
-  patchPostById(@Param('postId') id: string, @Body() data: UpdatePostByIdDto) {
+  patchPostById(@Param('postId') id: string, @Body() data: PostDto) {
     return this.postsService.patchPostById(Number(id), data);
   }
 

@@ -1,7 +1,16 @@
-export class CreateCategoryDto {
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+export class CategoryDto {
+  @IsString()
   name_vi: string;
+
+  @IsString()
   name_en: string;
+
+  @IsString()
   slug: string;
+
+  @IsNumber()
   order: number;
   creator_id?: string;
   modifier_id?: string;
@@ -12,16 +21,14 @@ export class PatchOrderDto {
 }
 
 export class GetCategoriesQuery {
+  @Type(() => Number)
+  @IsNumber()
   page: number;
-  pageSize: number;
-  keyword: string;
-}
 
-export class UpdateCategoryDto {
-  name_vi?: string;
-  name_en?: string;
-  slug?: string;
-  order?: number;
-  creator_id?: string;
-  modifier_id?: string;
+  @Type(() => Number)
+  @IsNumber()
+  pageSize: number;
+
+  @IsOptional()
+  keyword?: string;
 }

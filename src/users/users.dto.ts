@@ -1,24 +1,36 @@
+import { IsBoolean, IsEmail, IsString, IsNumber, IsOptional } from "class-validator";
+import { Type } from 'class-transformer';
 export class GetUsersQuery {
+  @Type(() => Number)
+  @IsNumber()
   page: number;
+
+  @Type(() => Number)
+  @IsNumber()
   pageSize: number;
-  keyword: string;
+
+  @IsOptional()
+  keyword?: string;
 }
-export class CreateUserDto {
+export class UserDto {
+  @IsEmail()
   email: string;
+
+  @IsString()
   password: string;
   creator_id?: string;
   modifier_id?: string;
+
+  @IsBoolean()
   status?: boolean;
 }
 
-export class UpdateUserDto {
-  email?: string;
-  password?: string;
-  modifier_id?: string;
-  status?: boolean;
-}
-
-export class User {
+export class Account{
+  @IsEmail()
   email: string;
+
+  @IsString()
   password: string;
 }
+
+

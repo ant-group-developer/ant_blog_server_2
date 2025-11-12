@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
-  CreateCategoryDto,
+  CategoryDto,
   GetCategoriesQuery,
   PatchOrderDto,
-  UpdateCategoryDto,
 } from './categories.dto';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateCategoryDto) {
+  async create(data: CategoryDto) {
     try {
       const category = await this.prisma.categories.create({ data });
       const categoryJson = {
@@ -116,7 +115,7 @@ export class CategoriesService {
     }
   }
 
-  async patchOrderByCategoryId(id: number, data: UpdateCategoryDto) {
+  async patchOrderByCategoryId(id: number, data: CategoryDto) {
     try {
       const existCategory = await this.prisma.categories.findUnique({
         where: { id: id },

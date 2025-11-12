@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto, GetUsersQuery, UpdateUserDto, User } from './users.dto';
+import { UserDto, GetUsersQuery, Account } from './users.dto';
 
 @Injectable()
 export class UsersService {
@@ -52,7 +52,7 @@ export class UsersService {
     }
   }
 
-  async create(data: CreateUserDto) {
+  async create(data: UserDto) {
     try {
       const existUser = await this.prisma.users.findUnique({
         where: { email: data.email },
@@ -77,7 +77,7 @@ export class UsersService {
     }
   }
 
-  async update(id: string, data: UpdateUserDto) {
+  async update(id: string, data: UserDto) {
     try {
       const existUser = await this.prisma.users.findUnique({
         where: { id },
@@ -112,7 +112,7 @@ export class UsersService {
       throw Error(error);
     }
   }
-  async login(data: User) {
+  async login(data: Account) {
     try {
       const existUser = await this.prisma.users.findUnique({
         where: { email: data.email },
