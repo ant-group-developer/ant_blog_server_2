@@ -35,12 +35,32 @@ export class PostsService {
   async find(query: GetPostsQuery) {
     try {
       let { page, pageSize } = query;
+      if(!page || !pageSize) {
+        return {
+          message: "Missing parameter!"
+        }
+      }
       const { keyword } = query;
       page = Number(page);
       pageSize = Number(pageSize);
       const skip = (page - 1) * pageSize;
       const take = pageSize;
-      const totalItems = await this.prisma.posts.count();
+      const totalItems = await this.prisma.posts.count({
+        where: {
+          OR: [
+            {
+              title_vi: {
+                contains: keyword,
+              },
+            },
+            {
+              title_en: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      });
       const posts = await this.prisma.posts.findMany({
         skip,
         take,

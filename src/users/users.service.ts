@@ -11,6 +11,11 @@ export class UsersService {
   async find(query: GetUsersQuery) {
     try {
       let { page, pageSize } = query;
+      if(!page || !pageSize) {
+        return {
+          message: "Missing parameter!"
+        }
+      }
       const { keyword } = query;
       page = Number(page);
       pageSize = Number(pageSize);
@@ -25,7 +30,13 @@ export class UsersService {
           },
         },
       });
-      const totalItems = await this.prisma.users.count();
+      const totalItems = await this.prisma.users.count({
+        where: {
+          email: {
+            contains: keyword,
+          },
+        },
+      });
       const totalPage = Math.ceil(totalItems / take) || 0;
       return {
         data: users,
@@ -133,11 +144,12 @@ export class UsersService {
         process.env.JWT_REFRESH_SECRET || 'refresh_secret',
         { expiresIn: '7d' },
       );
-
+      const { password, ...userWithoutPassword } = existUser;
       return {
         message: 'Login success!',
         accessToken: accessToken,
         refreshToken: refreshToken,
+        data: userWithoutPassword
       };
     } catch (error) {
       throw new Error(error);

@@ -30,6 +30,11 @@ export class CategoriesService {
   async find(query: GetCategoriesQuery) {
     try {
       let { page, pageSize } = query;
+      if(!page || !pageSize) {
+        return {
+          message: "Missing parameter!"
+        }
+      }
       const { keyword } = query;
       page = Number(page);
       pageSize = Number(pageSize);
@@ -58,7 +63,22 @@ export class CategoriesService {
         ...category,
         id: category.id.toString(),
       }));
-      const totalItems = await this.prisma.categories.count();
+      const totalItems = await this.prisma.categories.count({
+        where: {
+          OR: [
+            {
+              name_en: {
+                contains: keyword,
+              },
+            },
+            {
+              name_vi: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      });
       const totalPage = Math.ceil(totalItems / take) || 0;
       return {
         data: categoriesArray,
