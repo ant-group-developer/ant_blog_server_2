@@ -87,13 +87,16 @@ export class UsersService {
           message: 'This user is not exist',
         };
       }
-      const existEmail = await this.prisma.users.findUnique({
-        where: { email: data.email },
-      });
-      if (existEmail) {
-        return {
-          message: 'This email is used in the system !',
-        };
+      if (data.email && data.email !== existUser.email) {
+        const existEmail = await this.prisma.users.findUnique({
+          where: { email: data.email },
+        });
+
+        if (existEmail) {
+          return {
+            message: 'This email is already used in the system!',
+          };
+        }
       }
       if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
