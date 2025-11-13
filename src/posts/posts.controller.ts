@@ -33,4 +33,9 @@ export class PostsController {
   deletePost(@Param('postId') id: string) {
     return this.postsService.deletePost(Number(id));
   }
+
+  @Get(':postId')
+  findPostById(@Param('postId') id: string) {
+    return this.postsService.findPostById(Number(id));
+  }
 }

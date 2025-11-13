@@ -156,4 +156,24 @@ export class PostsService {
       throw Error(error);
     }
   }
+
+  async findPostById(id: number) {
+    try {
+      const post = await this.prisma.posts.findUnique({
+        where: { id: id },
+      });
+      if (!post) {
+        return {
+          message: 'This post is not exist !',
+        };
+      }
+      return {
+        ...post,
+        id: post.id.toString(),
+        category_id: post.category_id.toString(),
+      };
+    } catch (error) {
+      throw Error(error);
+    }
+  } 
 }
